@@ -2,6 +2,7 @@
 module.exports = function(grunt) {
 	var port = grunt.option('port') || 8000;
 	var root = grunt.option('root') || '.';
+	var slides = grunt.option('slides') || 'slides';
 
 	if (!Array.isArray(root)) root = [root];
 
@@ -137,10 +138,10 @@ module.exports = function(grunt) {
 				tasks: 'css-core'
 			},
 			html: {
-				files: root.map(path => path + 'slides/*.html')
+				files: root.map(path => path + slides + '/*.html')
 			},
 			markdown: {
-				files: root.map(path => path + 'slides/*.md')
+				files: root.map(path => path + slides + '/*.md')
 			},
 			options: {
 				livereload: true
@@ -155,12 +156,12 @@ module.exports = function(grunt) {
 		,
 		includes: {
 			slide: {
-				cwd: 'slides',
+				cwd: slides,
 				src: [ 'slides.html' ],
 				dest: 'build/temp/',
 				options: {
 					flatten: true,
-					includePath: 'slides'
+					includePath: slides
 				}
 			},
 			index: {
