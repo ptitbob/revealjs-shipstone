@@ -10,3 +10,6 @@ grunt serve --slides=ma-presentation
 
 Il est important que votre fichier de base de votre presentation s'appelle ```slides.html```
 
+```
+grunt serve --root=/Users/francois/workspaces/projects/test-slide
+```

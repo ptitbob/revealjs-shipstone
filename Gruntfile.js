@@ -2,7 +2,7 @@
 module.exports = function(grunt) {
 	var port = grunt.option('port') || 8000;
 	var root = grunt.option('root') || '.';
-	var slides = grunt.option('slides') || 'slides';
+	var slides = root + '/' + (grunt.option('slides') || 'slides');
 
 	if (!Array.isArray(root)) root = [root];
 
@@ -45,6 +45,13 @@ module.exports = function(grunt) {
 				cwd: 'revealjs/css/theme/source',
 				src: ['*.sass', '*.scss'],
 				dest: 'build/css/theme',
+				ext: '.css'
+			},
+			presentation: {
+				expand: true,
+				cwd: slides + '/css',
+				src: ['*.sass', '*.scss'],
+				dest: 'build/css',
 				ext: '.css'
 			}
 		},
