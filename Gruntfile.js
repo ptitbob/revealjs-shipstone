@@ -51,7 +51,7 @@ module.exports = function(grunt) {
 				expand: true,
 				cwd: slides + '/css',
 				src: ['*.sass', '*.scss'],
-				dest: 'build/css',
+				dest: 'build/temp/css',
 				ext: '.css'
 			}
 		},
@@ -69,6 +69,15 @@ module.exports = function(grunt) {
 			compress: {
 				src: 'build/css/reveal.css',
 				dest: 'build/css/reveal.min.css'
+			},
+			presentation: {
+				files: [{
+					expand: true,
+					cwd: 'build/temp/css/',
+					src: ['*.css'],
+					dest: 'build/css/theme',
+					ext: '.min.css'
+				}]
 			}
 		},
 
@@ -145,10 +154,20 @@ module.exports = function(grunt) {
 				tasks: 'css-core'
 			},
 			html: {
-				files: root.map(path => path + slides + '/*.html')
+				files: [slides + '/*.html'],
+				tasks: ['buildIndex']
 			},
 			markdown: {
-				files: root.map(path => path + slides + '/*.md')
+				files: [slides + '/*.md'],
+				tasks: ['copy:slide_md', 'buildIndex']
+			},
+			images: {
+				files: [ slides + '/images/*.*' ],
+				task: 'copy:slide_images'
+			},
+			presentationCss: {
+				files: slides + '/scss/*.*',
+				task: ['sass:presentation', 'cssmin:presentation', 'copy:slide_style_images']
 			},
 			options: {
 				livereload: true
@@ -158,11 +177,11 @@ module.exports = function(grunt) {
 		retire: {
 			js: [ 'revealjs/js/reveal.js', 'revealjs/lib/js/*.js', 'revealjs/plugin/**/*.js' ],
 			node: [ '.' ]
-		}
+		},
 		// prepare own presentation
-		,
+		
 		includes: {
-			slide: {
+			slides: {
 				cwd: slides,
 				src: [ 'slides.html' ],
 				dest: 'build/temp/',
@@ -185,7 +204,10 @@ module.exports = function(grunt) {
 			lib: { expand: true, flatten: false, cwd: 'revealjs/lib/', src: '**', dest: 'build/lib' },
 			print: { expand: true, cwd: 'revealjs/css/print', src: '**/*.css', dest: 'build/css/print' },
 			plugin: { expand: true, flatten: false, cwd: 'revealjs/plugin/', src: '**', dest: 'build/plugin' },
-			reveal_core: { expand: false, src: 'revealjs/js/reveal.js', dest: 'build/js/reveal.js' }
+			reveal_core: { expand: false, src: 'revealjs/js/reveal.js', dest: 'build/js/reveal.js' },
+			slide_style_images: { expand: true, flatten: false, cwd: slides + '/scss/images/', src: [ '**/*.*' ], dest: 'build/css/images' },
+			slide_images: { expand: true, flatten: false, cwd: slides + '/images/', src: '**/*.*', dest: 'build/images' },
+			slide_md: { expand: true, flatten: false, cwd: slides, src: '**/*.md', dest: 'build', force: true }
 		},
 		clean: {
 			temp: [ 'build/temp/' ],
@@ -234,8 +256,9 @@ module.exports = function(grunt) {
 	grunt.registerTask( 'test', [ 'jshint', 'qunit' ] );
 
 	// slides
-	grunt.registerTask( 'buildIndex', [ 'includes:slide', 'includes:index', 'clean:temp' ] );
+	grunt.registerTask( 'buildIndex', [ 'includes:slides', 'includes:index' ] );
+	grunt.registerTask( 'build', [ 'clean', 'css', 'uglify', 'copy', 'buildIndex', 'clean:temp' ]);
 
-	grunt.registerTask( 'build', [ 'clean', 'css', 'copy', 'buildIndex' ]);
-
+	console.log(slides + '/*.html');
+	
 };
