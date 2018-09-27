@@ -51,7 +51,7 @@ module.exports = function(grunt) {
 				expand: true,
 				cwd: slides + '/css',
 				src: ['*.sass', '*.scss'],
-				dest: 'build/temp/css',
+				dest: 'build/css/theme',
 				ext: '.css'
 			}
 		},
@@ -69,15 +69,6 @@ module.exports = function(grunt) {
 			compress: {
 				src: 'build/css/reveal.css',
 				dest: 'build/css/reveal.min.css'
-			},
-			presentation: {
-				files: [{
-					expand: true,
-					cwd: 'build/temp/css/',
-					src: ['*.css'],
-					dest: 'build/css/theme',
-					ext: '.min.css'
-				}]
 			}
 		},
 
@@ -169,6 +160,10 @@ module.exports = function(grunt) {
 				files: slides + '/scss/*.*',
 				task: ['sass:presentation', 'cssmin:presentation', 'copy:slide_style_images']
 			},
+			presentionConfiguration: {
+				files: slides + '/reveal.initialization.json',
+				tasks: [ 'copy:configuration' ]
+			},
 			options: {
 				livereload: true
 			}
@@ -207,7 +202,8 @@ module.exports = function(grunt) {
 			reveal_core: { expand: false, src: 'revealjs/js/reveal.js', dest: 'build/js/reveal.js' },
 			slide_style_images: { expand: true, flatten: false, cwd: slides + '/scss/images/', src: [ '**/*.*' ], dest: 'build/css/images' },
 			slide_images: { expand: true, flatten: false, cwd: slides + '/images/', src: '**/*.*', dest: 'build/images' },
-			slide_md: { expand: true, flatten: false, cwd: slides, src: '**/*.md', dest: 'build', force: true }
+			slide_md: { expand: true, flatten: false, cwd: slides, src: '**/*.md', dest: 'build', force: true },
+			configuration: { expand: false, src: slides + '/reveal.initialization.json', dest: 'build/configuration/initialization.json' },
 		},
 		clean: {
 			temp: [ 'build/temp/' ],
