@@ -7,7 +7,7 @@
 		<title>reveal.js</title>
 
 		<link rel="stylesheet" href="css/reveal.css">
-		<link rel="stylesheet" href="css/theme/black.css">
+		<link rel="stylesheet" href="css/theme/black.css" id="theme_name">
 
 		<!-- Theme used for syntax highlighting of code -->
 		<link rel="stylesheet" href="lib/css/zenburn.css">
@@ -35,14 +35,50 @@
 			// More info about config & dependencies:
 			// - https://github.com/hakimel/reveal.js#configuration
 			// - https://github.com/hakimel/reveal.js#dependencies
-			Reveal.initialize({
+			var options = {
+				controls: false,
+				progress: false,
+				history: false,
+				center: true,
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
 				dependencies: [
 					{ src: 'plugin/markdown/marked.js' },
 					{ src: 'plugin/markdown/markdown.js' },
 					{ src: 'plugin/notes/notes.js', async: true },
 					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
 				]
-			});
+			};
+			var useRevealInitialization = false;
+			var httpRequest = new XMLHttpRequest();
+			httpRequest.onreadystatechange = function() {
+				if ( httpRequest.readyState == 4 ) {
+					if (httpRequest.status == 200) {
+					var userOptions = JSON.parse( httpRequest.responseText );
+					// console.log( JSON.stringify( userOptions ) );
+					if ( userOptions[ 'title' ] ){
+						document.title = userOptions[ 'title' ];
+						delete userOptions[ 'title' ];
+					}
+					if ( userOptions[ 'theme' ] ){
+						var minifiedCssThemeFile = 'css/theme/' + userOptions[ 'theme' ] + '.css';
+						document.getElementById('theme_name').setAttribute('href', minifiedCssThemeFile);
+						delete userOptions[ 'theme' ];
+					}
+					console.log('1 - ' + JSON.stringify(userOptions));
+					console.log('2 - ' + JSON.stringify(options));
+					for ( var field in userOptions ) {
+						console.log(field);
+						options[ field ] = userOptions[ field ];
+					}
+					console.log('3 - ' + JSON.stringify(options));
+				}
+				console.log('4 - ' + JSON.stringify(options));
+					Reveal.initialize( options );
+
+				}
+			};
+			httpRequest.open( 'GET', 'configuration/initialization.json', true );
+			httpRequest.send();
 		</script>
 	</body>
 </html>
