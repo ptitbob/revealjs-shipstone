@@ -13,3 +13,6 @@ Il est important que votre fichier de base de votre presentation s'appelle ```sl
 ```
 grunt serve --root=/Users/francois/workspaces/projects/test-slide
 ```
+
+
+Le fichiers sass de la presentation doit être nommé `slides.scss` ou `slides.sass`, comme pour le `slides.html` il peut gérer les includes
