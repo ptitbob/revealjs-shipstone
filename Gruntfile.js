@@ -3,6 +3,7 @@ module.exports = function(grunt) {
 	var port = grunt.option('port') || 8000;
 	var root = grunt.option('root') || '.';
 	var slides = root + '/' + (grunt.option('slides') || 'slides');
+	const sass = require('node-sass');
 
 	if (!Array.isArray(root)) root = [root];
 
@@ -36,6 +37,7 @@ module.exports = function(grunt) {
 		},
 
 		sass: {
+			options: { implementation: sass, sourceMap: true },
 			core: {
 				src: 'revealjs/css/reveal.scss',
 				dest: 'build/css/reveal.css'
