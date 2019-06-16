@@ -49,7 +49,7 @@ module.exports = function(grunt) {
 			},
 			presentation: {
 				expand: true,
-				cwd: slides + '/css',
+				cwd: slides + '/scss',
 				src: ['*.sass', '*.scss'],
 				dest: 'build/css/theme',
 				ext: '.css'
@@ -158,7 +158,7 @@ module.exports = function(grunt) {
 			},
 			presentationCss: {
 				files: slides + '/scss/*.*',
-				task: ['sass:presentation', 'cssmin:presentation', 'copy:slide_style_images']
+				tasks: ['sass:presentation', 'copy:slide_style_images']
 			},
 			presentionConfiguration: {
 				files: slides + '/reveal.initialization.json',
@@ -200,7 +200,7 @@ module.exports = function(grunt) {
 			print: { expand: true, cwd: 'revealjs/css/print', src: '**/*.css', dest: 'build/css/print' },
 			plugin: { expand: true, flatten: false, cwd: 'revealjs/plugin/', src: '**', dest: 'build/plugin' },
 			reveal_core: { expand: false, src: 'revealjs/js/reveal.js', dest: 'build/js/reveal.js' },
-			slide_style_images: { expand: true, flatten: false, cwd: slides + '/scss/images/', src: [ '**/*.*' ], dest: 'build/css/images' },
+			slide_style_images: { expand: true, flatten: false, cwd: slides + '/scss/images/', src: [ '**/*.*' ], dest: 'build/css/theme/images' },
 			slide_images: { expand: true, flatten: false, cwd: slides + '/images/', src: '**/*.*', dest: 'build/images' },
 			slide_md: { expand: true, flatten: false, cwd: slides, src: '**/*.md', dest: 'build', force: true },
 			configuration: { expand: false, src: slides + '/reveal.initialization.json', dest: 'build/configuration/initialization.json' },
